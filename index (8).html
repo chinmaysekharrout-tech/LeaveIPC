@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Team Leave Calendar 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#ece5dd;min-height:100vh}
+.shell{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hdr{background:#075e54;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.av{width:40px;height:40px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ht{font-size:16px;font-weight:700}.hs{font-size:11px;opacity:.8}
+.live-dot{width:8px;height:8px;background:#25d366;border-radius:50%;display:inline-block;margin-right:4px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.body{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:10px}
+.bub{background:#fff;border-radius:0 12px 12px 12px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.blbl{font-size:11px;font-weight:700;color:#075e54;margin-bottom:8px}
+.sbar{border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sbar.ok{background:#e8f5e9;color:#2e7d32}
+.sbar.err{background:#fdecea;color:#c0392b}
+.sbar.loading{background:#fff8e1;color:#e65100}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tab{font-size:11px;padding:4px 11px;border-radius:20px;cursor:pointer;border:1px solid #ccc;background:#f5f5f5;color:#555;font-family:'Nunito',sans-serif;font-weight:600}
+.tab.active{background:#075e54;color:#fff;border-color:#075e54}
+.chdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ctitle{font-size:15px;font-weight:700;color:#111}
+.dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px}
+.dname{font-size:10px;color:#999;text-align:center;padding:3px 0;font-weight:700}
+.dcell{min-height:50px;border-radius:5px;padding:2px;background:#f9f9f9;border:.5px solid #ebebeb;overflow:hidden;text-align:center}
+.dcell.empty{background:transparent;border-color:transparent}
+.dcell.today{border:2px solid #075e54;background:#f0faf8}
+.dnum{font-size:10px;font-weight:700;line-height:1.6;color:#333}
+.dcell.sunday .dnum{color:#c0392b}
+.dcell.saturday .dnum{color:#2980b9}
+.ltag{width:100%;border-radius:3px;margin-top:1px;padding:1px 3px;font-size:7px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;text-align:left}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.li{display:flex;align-items:center;gap:4px;font-size:10px;color:#555;font-weight:600}
+.ld{width:11px;height:11px;border-radius:3px}
+.abtn{display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;border:none;padding:9px 20px;border-radius:22px;font-size:13px;cursor:pointer;margin-top:10px;font-weight:700;font-family:'Nunito',sans-serif}
+.stitle{font-size:12px;font-weight:700;color:#075e54;margin-bottom:8px}
+.lrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:.5px solid #f0f0f0}
+.lrow:last-child{border-bottom:none}
+.mdot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mname{font-weight:700;color:#111;font-size:12px}
+.mmeta{display:flex;align-items:center;gap:6px;margin-top:2px;flex-wrap:wrap}
+.lbadge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
+.ldates{font-size:10px;color:#999}
+.ract{display:flex;gap:5px;flex-shrink:0}
+.bedit{background:#eaf4fc;border:1px solid #3498db;color:#2471c8;font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+.bdel{background:#fdecea;border:1px solid #e74c3c;color:#c0392b;font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+.sbub{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.stit{font-size:13px;font-weight:700;color:#075e54;margin-bottom:8px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid #f5f5f5;font-size:12px}
+.srow:last-child{border-bottom:none}
+.scnt{font-weight:700;font-size:14px}
+.cbtn{display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;border:none;padding:9px 20px;border-radius:22px;font-size:13px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif;margin-top:10px}
+.wtime{font-size:10px;color:#bbb;text-align:right;margin-top:6px}
+.emsg{color:#ccc;font-size:12px;padding:10px 0;text-align:center}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.ov.open{display:flex}
+.modal{background:#fff;border-radius:16px;padding:20px 18px;width:100%;max-width:360px;max-height:92vh;overflow-y:auto}
+.mbadge{font-size:10px;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:8px;font-weight:700}
+.mbadge.am{background:#e8f5e9;color:#075e54}
+.mbadge.em{background:#e8f1fc;color:#2471c8}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:14px;color:#111}
+.modal label{font-size:11px;color:#777;display:block;margin-top:12px;margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.modal input,.modal select{width:100%;padding:9px 11px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;color:#111;background:#fafafa;font-family:'Nunito',sans-serif}
+.modal input:focus,.modal select:focus{outline:none;border-color:#075e54}
+.mact{display:flex;gap:10px;margin-top:18px}
+.bcancel{flex:1;padding:10px;background:#f0f0f0;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#555;font-weight:700;font-family:'Nunito',sans-serif}
+.bsave{flex:1;padding:10px;background:#075e54;color:#fff;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+.bsave.em{background:#2471c8}
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
+.cov.open{display:flex}
+.cbox{background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:300px;text-align:center}
+.cbox p{font-size:14px;color:#333;margin-bottom:20px;line-height:1.5;font-weight:600}
+.cact{display:flex;gap:10px}
+.bno{flex:1;padding:10px;background:#f0f0f0;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+.byes{flex:1;padding:10px;background:#e74c3c;color:#fff;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#222;color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:600;z-index:300;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.spinner{display:inline-block;width:10px;height:10px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hdr">
+    <div class="av">👥</div>
+    <div>
+      <div class="ht">Team Leave Calendar</div>
+      <div class="hs"><span class="live-dot"></span>Real-time · Everyone sees live changes</div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="bub">
+      <div class="blbl">📋 TEAM LEAVE TRACKER</div>
+      <div class="sbar loading" id="sbar"><span class="spinner"></span>Loading team leaves...</div>
+      <div class="tabs" id="tabs"></div>
+      <div class="chdr"><span class="ctitle" id="ctitle"></span><span style="font-size:12px;color:#999">2026</span></div>
+      <div class="dgrid" id="dnames"></div>
+      <div id="cgrid"></div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#e74c3c"></div>Sick Leave</div>
+        <div class="li"><div class="ld" style="background:#3498db"></div>Casual Leave</div>
+        <div class="li"><div class="ld" style="background:#9b59b6"></div>Planned Leave</div>
+        <div class="li"><div class="ld" style="background:#f39c12"></div>WFH</div>
+        <div class="li"><div class="ld" style="background:#1abc9c"></div>Holiday</div>
+      </div>
+      <button class="abtn" id="addBtn">➕ Add My Leave</button>
+      <div class="wtime" id="t1"></div>
+    </div>
+    <div class="bub">
+      <div class="stitle">📋 All Leaves This Month</div>
+      <div id="llist"></div>
+    </div>
+    <div class="sbub">
+      <div class="stit">📊 Monthly Summary</div>
+      <div id="srows"></div>
+      <button class="cbtn" id="copyBtn">📋 Copy &amp; Share on WhatsApp</button>
+      <div class="wtime" id="t2"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="mov">
+  <div class="modal">
+    <div class="mbadge am" id="mbadge">New entry</div>
+    <h3 id="mhead">Add My Leave</h3>
+    <label>Your name</label><input type="text" id="fn" placeholder="e.g. Rahul Sharma"/>
+    <label>Leave type</label>
+    <select id="ft">
+      <option value="Sick Leave">🤒 Sick Leave</option>
+      <option value="Casual Leave">🏖️ Casual Leave</option>
+      <option value="Planned Leave">✈️ Planned Leave</option>
+      <option value="Work from Home">🏠 Work from Home</option>
+      <option value="Holiday">🎉 Holiday</option>
+    </select>
+    <label>From date</label><input type="date" id="ff"/>
+    <label>To date</label><input type="date" id="ft2"/>
+    <label>Month</label><select id="fm"></select>
+    <div class="mact">
+      <button class="bcancel" id="cancelBtn">Cancel</button>
+      <button class="bsave" id="saveBtn">Save Leave</button>
+    </div>
+  </div>
+</div>
+
+<div class="cov" id="cov">
+  <div class="cbox">
+    <div style="font-size:36px;margin-bottom:10px">🗑️</div>
+    <p id="cmsg">Delete this leave?</p>
+    <div class="cact">
+      <button class="bno" id="cno">Keep it</button>
+      <button class="byes" id="cyes">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  // ✅ Your Google Apps Script URL — connected to your Google Sheet
+  var API = 'https://script.google.com/macros/s/AKfycbyLkCU-7cruKakJ7U3w_hSagirC-o0G6cuhFvEHwjz8iNvus4O7yx4E3Qvq0uGqUEwK/exec';
+
+  var M=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var D=["Su","Mo","Tu","We","Th","Fr","Sa"];
+  var TC={"Sick Leave":"#e74c3c","Casual Leave":"#3498db","Planned Leave":"#9b59b6","Work from Home":"#f39c12","Holiday":"#1abc9c"};
+  var MC=["#e74c3c","#3498db","#9b59b6","#f39c12","#1abc9c","#e67e22","#16a085","#8e44ad","#2980b9","#c0392b"];
+  var cm=5,lv=[],clr={},ci=0,ei=null,di=null;
+
+  function gc(n){if(!clr[n])clr[n]=MC[ci++%MC.length];return clr[n];}
+  function pad(n){return n<10?'0'+n:''+n;}
+  function nw(){var d=new Date(),h=d.getHours(),mn=d.getMinutes(),ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+pad(mn)+' '+ap;}
+  function pd(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+  function fd(s){var d=pd(s);return d.getDate()+' '+M[d.getMonth()].slice(0,3);}
+  function dr(f,t){var a=pd(f),b=pd(t),o=[];for(var d=new Date(a);d<=b;d.setDate(d.getDate()+1))o.push(d.getDate());return o;}
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+  function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);}
+  function sb(msg,type){var b=document.getElementById('sbar');b.innerHTML=msg;b.className='sbar '+(type||'ok');}
+
+  function call(params,cb){
+    var url=API+'?v='+Date.now();
+    Object.keys(params).forEach(function(k){url+='&'+k+'='+encodeURIComponent(params[k]);});
+    fetch(url)
+      .then(function(r){return r.json();})
+      .then(function(d){cb(null,d);})
+      .catch(function(e){cb(e);});
+  }
+
+  function loadData(){
+    sb('<span class="spinner"></span> Loading...','loading');
+    call({action:'read'},function(err,data){
+      if(err){sb('❌ Cannot load. Check internet & reload.','err');return;}
+      lv=(data||[]).map(function(r){return{id:r.id,name:r.name,type:r.type,from:r.from,to:r.to,month:parseInt(r.month)||5};});
+      sb('🟢 Live — '+lv.length+' leave(s) · '+nw(),'ok');
+      render();
+    });
+  }
+
+  // Auto-refresh every 10 seconds — everyone sees changes instantly
+  setInterval(function(){
+    call({action:'read'},function(err,data){
+      if(err)return;
+      lv=(data||[]).map(function(r){return{id:r.id,name:r.name,type:r.type,from:r.from,to:r.to,month:parseInt(r.month)||5};});
+      sb('🟢 Live — '+lv.length+' leave(s) · '+nw(),'ok');
+      render();
+    });
+  },10000);
+
+  // Also refresh when user comes back to tab
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)loadData();});
+
+  function render(){bTabs();bCal();bList();bSum();document.getElementById('t1').textContent=nw();document.getElementById('t2').textContent=nw();}
+
+  function bTabs(){
+    var el=document.getElementById('tabs');el.innerHTML='';
+    for(var i=5;i<=11;i++){
+      var t=document.createElement('div');
+      t.className='tab'+(i===cm?' active':'');
+      t.textContent=M[i].slice(0,3);
+      (function(m){t.addEventListener('click',function(){cm=m;render();});})(i);
+      el.appendChild(t);
+    }
+  }
+
+  function bCal(){
+    var yr=2026,mo=cm,f=new Date(yr,mo,1).getDay(),tot=new Date(yr,mo+1,0).getDate(),td=new Date();
+    var ml=lv.filter(function(l){return l.month===mo;});
+    document.getElementById('ctitle').textContent=M[mo];
+    var dn=document.getElementById('dnames');dn.innerHTML='';
+    D.forEach(function(d){var e=document.createElement('div');e.className='dname';e.textContent=d;dn.appendChild(e);});
+    var g=document.getElementById('cgrid');g.innerHTML='';
+    var row=nr();g.appendChild(row);
+    for(var e=0;e<f;e++)row.appendChild(ne());
+    for(var day=1;day<=tot;day++){
+      if((f+day-1)%7===0&&day!==1){row=nr();g.appendChild(row);}
+      var dw=(f+day-1)%7;
+      var cell=document.createElement('div');
+      cell.className='dcell'+(dw===0?' sunday':dw===6?' saturday':'');
+      if(td.getFullYear()===yr&&td.getMonth()===mo&&td.getDate()===day)cell.classList.add('today');
+      var num=document.createElement('div');num.className='dnum';num.textContent=day;cell.appendChild(num);
+      ml.forEach(function(l){
+        if(dr(l.from,l.to).indexOf(day)>-1){
+          var tag=document.createElement('div');tag.className='ltag';
+          tag.style.background=TC[l.type]||'#888';
+          tag.textContent=l.name.split(' ')[0];
+          cell.appendChild(tag);
+        }
+      });
+      row.appendChild(cell);
+    }
+  }
+  function nr(){var r=document.createElement('div');r.className='dgrid';return r;}
+  function ne(){var c=document.createElement('div');c.className='dcell empty';return c;}
+
+  function bList(){
+    var ml=lv.filter(function(l){return l.month===cm;});
+    var el=document.getElementById('llist');el.innerHTML='';
+    if(!ml.length){el.innerHTML='<div class="emsg">No leaves this month yet.<br>Tap ➕ Add My Leave!</div>';return;}
+    ml.forEach(function(l){
+      var row=document.createElement('div');row.className='lrow';
+      var dot=document.createElement('div');dot.className='mdot';dot.style.background=gc(l.name);dot.textContent=l.name.slice(0,2).toUpperCase();
+      var info=document.createElement('div');info.className='minfo';
+      var nm=document.createElement('div');nm.className='mname';nm.textContent=l.name;
+      var meta=document.createElement('div');meta.className='mmeta';
+      var badge=document.createElement('span');badge.className='lbadge';
+      badge.style.background=(TC[l.type]||'#888')+'22';badge.style.color=TC[l.type]||'#888';
+      badge.textContent=l.type.replace(' Leave','').replace('Work from Home','WFH');
+      var dates=document.createElement('span');dates.className='ldates';
+      dates.textContent=l.from===l.to?fd(l.from):fd(l.from)+' – '+fd(l.to);
+      meta.appendChild(badge);meta.appendChild(dates);
+      info.appendChild(nm);info.appendChild(meta);
+      var act=document.createElement('div');act.className='ract';
+      var eb=document.createElement('button');eb.className='bedit';eb.textContent='✏️ Edit';
+      (function(id){eb.addEventListener('click',function(){oEdit(id);});})(l.id);
+      var db=document.createElement('button');db.className='bdel';db.textContent='🗑️ Del';
+      (function(id,n,t){db.addEventListener('click',function(){aDel(id,n,t);});})(l.id,l.name,l.type);
+      act.appendChild(eb);act.appendChild(db);
+      row.appendChild(dot);row.appendChild(info);row.appendChild(act);
+      el.appendChild(row);
+    });
+  }
+
+  function bSum(){
+    var ml=lv.filter(function(l){return l.month===cm;});
+    var el=document.getElementById('srows');el.innerHTML='';
+    var cnt={};ml.forEach(function(l){cnt[l.type]=(cnt[l.type]||0)+1;});
+    if(!Object.keys(cnt).length){el.innerHTML='<div class="emsg">No leaves recorded yet.</div>';return;}
+    Object.keys(cnt).forEach(function(tp){
+      var row=document.createElement('div');row.className='srow';
+      var lb=document.createElement('span');lb.textContent=tp;lb.style.color='#555';
+      var vl=document.createElement('span');vl.className='scnt';vl.style.color=TC[tp]||'#333';vl.textContent=cnt[tp];
+      row.appendChild(lb);row.appendChild(vl);el.appendChild(row);
+    });
+  }
+
+  function fmn(sel){
+    var s=document.getElementById('fm');s.innerHTML='';
+    for(var i=5;i<=11;i++){
+      var o=document.createElement('option');o.value=i;o.textContent=M[i]+' 2026';
+      if(i===sel)o.selected=true;
+      s.appendChild(o);
+    }
+  }
+
+  function oAdd(){
+    ei=null;
+    document.getElementById('mbadge').textContent='New entry';document.getElementById('mbadge').className='mbadge am';
+    document.getElementById('mhead').textContent='Add My Leave';
+    document.getElementById('saveBtn').textContent='Save Leave';document.getElementById('saveBtn').className='bsave';
+    document.getElementById('fn').value='';document.getElementById('ft').value='Sick Leave';
+    document.getElementById('ff').value='';document.getElementById('ft2').value='';
+    fmn(cm);document.getElementById('mov').classList.add('open');
+  }
+
+  function oEdit(id){
+    var l=lv.find(function(x){return x.id===id;});if(!l)return;
+    ei=id;
+    document.getElementById('mbadge').textContent='Editing';document.getElementById('mbadge').className='mbadge em';
+    document.getElementById('mhead').textContent='Edit Leave';
+    document.getElementById('saveBtn').textContent='Update';document.getElementById('saveBtn').className='bsave em';
+    document.getElementById('fn').value=l.name;document.getElementById('ft').value=l.type;
+    document.getElementById('ff').value=l.from;document.getElementById('ft2').value=l.to;
+    fmn(l.month);document.getElementById('mov').classList.add('open');
+  }
+
+  function cModal(){document.getElementById('mov').classList.remove('open');ei=null;}
+
+  function doSave(){
+    var name=document.getElementById('fn').value.trim();
+    var type=document.getElementById('ft').value;
+    var from=document.getElementById('ff').value;
+    var to=document.getElementById('ft2').value;
+    var month=parseInt(document.getElementById('fm').value);
+    if(!name||!from||!to){toast('⚠️ Please fill all fields');return;}
+    if(to<from){toast('⚠️ End date must be after start date');return;}
+    var id=ei||uid();
+    var action=ei?'update':'add';
+    cModal();
+    sb('<span class="spinner"></span> Saving for everyone...','loading');
+    call({action:action,id:id,name:name,type:type,from:from,to:to,month:month},function(err){
+      if(err){sb('❌ Save failed. Try again.','err');return;}
+      toast(ei?'✅ Updated! Everyone can see it':'✅ Leave added for everyone! 🎉');
+      loadData();
+    });
+  }
+
+  function aDel(id,n,t){
+    di=id;
+    document.getElementById('cmsg').textContent='Delete '+n+"'s "+t+'?';
+    document.getElementById('cov').classList.add('open');
+  }
+  function cConf(){di=null;document.getElementById('cov').classList.remove('open');}
+  function doDel(){
+    if(!di){cConf();return;}
+    var id=di;cConf();
+    sb('<span class="spinner"></span> Deleting...','loading');
+    call({action:'delete',id:id},function(err){
+      if(err){sb('❌ Delete failed.','err');return;}
+      toast('🗑️ Deleted for all team members');
+      loadData();
+    });
+  }
+
+  function doCopy(){
+    var ml=lv.filter(function(l){return l.month===cm;});
+    var txt='📅 *'+M[cm]+' 2026 — Team Leave Summary*\n\n';
+    if(!ml.length)txt+='No leaves recorded.';
+    else ml.forEach(function(l){txt+='• '+l.name+': '+l.type+' ('+(l.from===l.to?fd(l.from):fd(l.from)+' to '+fd(l.to))+')\n';});
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('📋 Copied! Paste in WhatsApp 🎉');});}
+    else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 Copied!');}
+  }
+
+  document.getElementById('addBtn').addEventListener('click',oAdd);
+  document.getElementById('cancelBtn').addEventListener('click',cModal);
+  document.getElementById('saveBtn').addEventListener('click',doSave);
+  document.getElementById('cno').addEventListener('click',cConf);
+  document.getElementById('cyes').addEventListener('click',doDel);
+  document.getElementById('copyBtn').addEventListener('click',doCopy);
+
+  loadData();
+})();
+</script>
+</body>
+</html>
